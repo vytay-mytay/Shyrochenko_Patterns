@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShyrochenkoPatterns.Common\ShyrochenkoPatterns.Common.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Models\ShyrochenkoPatterns.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extentions\" />
+  </ItemGroup>
+
+</Project>
