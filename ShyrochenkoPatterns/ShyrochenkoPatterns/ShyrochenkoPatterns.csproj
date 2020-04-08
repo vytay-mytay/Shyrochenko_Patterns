@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.1\ShyrochenkoPatterns.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="4.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.annotations" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swagger" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swaggergen" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swaggerui" Version="5.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="Twilio.AspNet.Core" Version="5.33.1" />
+    <PackageReference Include="Wangkanai.Detection" Version="2.0.0-beta10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShyrochenkoPatterns.Common\ShyrochenkoPatterns.Common.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.DAL\ShyrochenkoPatterns.DAL.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Domain\ShyrochenkoPatterns.Domain.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Models\ShyrochenkoPatterns.Models.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.ResourceLibrary\ShyrochenkoPatterns.ResourceLibrary.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Services\ShyrochenkoPatterns.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
+    <Folder Include="Views\Home\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\EmailTemplates\ConfirmEmail.html" />
+    <None Include="wwwroot\EmailTemplates\Registration.html" />
+    <None Include="wwwroot\EmailTemplates\ResetPassword.html" />
+    <None Include="wwwroot\HtmlContentTemplates\HtmlLayout.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Properties_4launchSettings_1json__JSONSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
+
+</Project>

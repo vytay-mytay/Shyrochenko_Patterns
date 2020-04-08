@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="SQL\**" />
+    <EmbeddedResource Remove="SQL\**" />
+    <None Remove="SQL\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190123095832_Profile.cs" />
+    <Compile Remove="Migrations\20190128143242_userRole.cs" />
+    <Compile Remove="Migrations\20190711075923_FacebookAuth.cs" />
+    <Compile Remove="Migrations\20190711084620_FacebookAuth.cs" />
+    <Compile Remove="Migrations\20200227122723_Test.cs" />
+    <Compile Remove="Migrations\20200227122723_Test.Designer.cs" />
+    <Compile Remove="Migrations\20200228102505_test2.cs" />
+    <Compile Remove="Migrations\20200228102505_test2.Designer.cs" />
+    <Compile Remove="Migrations\20200312103517_Fix_Token.cs" />
+    <Compile Remove="Migrations\20200312103517_Fix_Token.Designer.cs" />
+    <Compile Remove="Migrations\20200322184201_Create_Post_Proverb_Story.cs" />
+    <Compile Remove="Migrations\20200322184201_Create_Post_Proverb_Story.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShyrochenkoPatterns.Common\ShyrochenkoPatterns.Common.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Domain\ShyrochenkoPatterns.Domain.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Models\ShyrochenkoPatterns.Models.csproj" />
+  </ItemGroup>
+
+</Project>
+

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.103.29" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.35" />
+    <PackageReference Include="Braintree" Version="4.16.0" />
+    <PackageReference Include="EPPlus" Version="4.5.3.2" />
+    <PackageReference Include="FcmSharp" Version="3.0.1" />
+    <PackageReference Include="itext7.pdfhtml" Version="2.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
+    <PackageReference Include="PushSharp" Version="4.0.10" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
+    <PackageReference Include="Stripe.net" Version="34.23.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="Twilio" Version="5.37.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShyrochenkoPatterns.Common\ShyrochenkoPatterns.Common.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.DAL\ShyrochenkoPatterns.DAL.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Domain\ShyrochenkoPatterns.Domain.csproj" />
+    <ProjectReference Include="..\ShyrochenkoPatterns.Models\ShyrochenkoPatterns.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Jobs\" />
+  </ItemGroup>
+
+</Project>
