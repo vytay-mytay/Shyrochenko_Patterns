@@ -1,4 +1,5 @@
-﻿using ShyrochenkoPatterns.Models.Post.PostTypes;
+﻿using ShyrochenkoPatterns.Models.Post;
+using ShyrochenkoPatterns.Models.Post.PostTypes;
 using System;
 
 namespace ShyrochenkoPatterns.Domain.Entities.Post
@@ -14,5 +15,10 @@ namespace ShyrochenkoPatterns.Domain.Entities.Post
         public string Text { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public IPost Clone()
+        {
+            return new Poem();
+        }
     }
 }

@@ -3,7 +3,7 @@ using ShyrochenkoPatterns.Models.ResponseModels.Post;
 using ShyrochenkoPatterns.Services.Interfaces.Post;
 using System.Threading.Tasks;
 
-namespace ShyrochenkoPatterns.Services.Services.Client
+namespace ShyrochenkoPatterns.Services.Services.AbstractFactory.Client
 {
     public class Writer
     {

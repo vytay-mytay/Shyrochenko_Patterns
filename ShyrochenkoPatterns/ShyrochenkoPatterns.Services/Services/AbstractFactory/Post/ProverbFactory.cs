@@ -7,7 +7,7 @@ using ShyrochenkoPatterns.Services.Interfaces.Post;
 using System;
 using System.Threading.Tasks;
 
-namespace ShyrochenkoPatterns.Services.Services.Post
+namespace ShyrochenkoPatterns.Services.Services.AbstractFactory.Post
 {
     public class ProverbFactory : PostFactory
     {
