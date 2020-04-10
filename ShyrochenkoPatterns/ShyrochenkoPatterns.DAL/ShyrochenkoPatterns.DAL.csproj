@@ -24,6 +24,8 @@
     <Compile Remove="Migrations\20200312103517_Fix_Token.Designer.cs" />
     <Compile Remove="Migrations\20200322184201_Create_Post_Proverb_Story.cs" />
     <Compile Remove="Migrations\20200322184201_Create_Post_Proverb_Story.Designer.cs" />
+    <Compile Remove="Migrations\20200322185631_Create_Post_Proverb_Story.cs" />
+    <Compile Remove="Migrations\20200322185631_Create_Post_Proverb_Story.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

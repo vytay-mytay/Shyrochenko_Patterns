@@ -9,5 +9,7 @@ namespace ShyrochenkoPatterns.Models.Post
         string Text { get; set; }
 
         DateTime CreationDate { get; set; }
+
+        public IPost Clone();
     }
 }

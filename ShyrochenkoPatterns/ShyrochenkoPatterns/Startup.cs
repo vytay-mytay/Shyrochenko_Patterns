@@ -33,9 +33,11 @@ using ShyrochenkoPatterns.ResourceLibrary;
 using ShyrochenkoPatterns.Services.Interfaces;
 using ShyrochenkoPatterns.Services.Interfaces.Exporting;
 using ShyrochenkoPatterns.Services.Interfaces.External;
+using ShyrochenkoPatterns.Services.Interfaces.Prototype;
 using ShyrochenkoPatterns.Services.Services;
 using ShyrochenkoPatterns.Services.Services.Exporting;
 using ShyrochenkoPatterns.Services.Services.External;
+using ShyrochenkoPatterns.Services.Services.Prototype;
 using ShyrochenkoPatterns.Services.StartApp;
 using Swashbuckle.AspNetCore.Filters;
 using System;
@@ -103,6 +105,7 @@ namespace ShyrochenkoPatterns
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IS3Service, S3Service>();
             services.AddTransient<ICallService, CallService>();
+            services.AddTransient<IPostPrototype, PostPrototype>();
 
             #endregion
 
@@ -305,7 +308,7 @@ namespace ShyrochenkoPatterns
                           IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                           ValidateIssuerSigningKey = true
                       };
-            });
+                  });
 
             services.AddRouting();
             services.AddMemoryCache();
