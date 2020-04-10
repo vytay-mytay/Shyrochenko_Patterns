@@ -3,6 +3,7 @@ using ShyrochenkoPatterns.Domain.Entities;
 using ShyrochenkoPatterns.Domain.Entities.Chat;
 using ShyrochenkoPatterns.Domain.Entities.Identity;
 using ShyrochenkoPatterns.Domain.Entities.Post;
+using ShyrochenkoPatterns.Models.Enums;
 using ShyrochenkoPatterns.Models.RequestModels;
 using ShyrochenkoPatterns.Models.RequestModels.Posts;
 using ShyrochenkoPatterns.Models.ResponseModels;
@@ -52,11 +53,14 @@ namespace ShyrochenkoPatterns.Services.StartApp
 
             CreateMap<PostRequestModel, Story>();
 
-            CreateMap<Story, PostResponseModel>();
+            CreateMap<Story, PostResponseModel>()
+                .ForMember(t => t.Type, opt => opt.MapFrom(x => PostType.Story));
 
-            CreateMap<Poem, PostResponseModel>();
-            
-            CreateMap<Proverb, PostResponseModel>();
+            CreateMap<Poem, PostResponseModel>()
+                .ForMember(t => t.Type, opt => opt.MapFrom(x => PostType.Poem));
+
+            CreateMap<Proverb, PostResponseModel>()
+                .ForMember(t => t.Type, opt => opt.MapFrom(x => PostType.Proverb));
         }
     }
 }

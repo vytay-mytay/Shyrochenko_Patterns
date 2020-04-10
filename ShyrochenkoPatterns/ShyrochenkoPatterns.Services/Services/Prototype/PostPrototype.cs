@@ -38,12 +38,37 @@ namespace ShyrochenkoPatterns.Services.Services.Prototype
 
         public async Task<PostResponseModel> CreateProverb(PostRequestModel model)
         {
-            throw new NotImplementedException();
+            var proverb = (Proverb)StaticPosts.Proverb.Clone();
+
+            if (model.ImageId.HasValue)
+                proverb.ImageId = model.ImageId.Value;
+            proverb.Text = model.Text;
+            proverb.Title = model.Title;
+            proverb.CreationDate = DateTime.UtcNow;
+
+            _unitOfWork.Repository<Proverb>().Insert(proverb);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<PostResponseModel>(proverb);
         }
 
         public async Task<PostResponseModel> CreateStory(PostRequestModel model)
         {
-            throw new NotImplementedException();
+            var story = (Story)StaticPosts.Story.Clone();
+
+            if (model.SeriesId.HasValue && model.PartNumber.HasValue)
+            {
+                story.PartNumber = model.PartNumber.Value;
+                story.SeriesId = model.SeriesId.Value;
+            }
+            story.Text = model.Text;
+            story.Title = model.Title;
+            story.CreationDate = DateTime.UtcNow;
+
+            _unitOfWork.Repository<Story>().Insert(story);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<PostResponseModel>(story);
         }
     }
 }

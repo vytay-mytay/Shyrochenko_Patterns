@@ -1,8 +1,13 @@
-﻿namespace ShyrochenkoPatterns.Models.ResponseModels.Post
+﻿using ShyrochenkoPatterns.Models.Enums;
+using System;
+
+namespace ShyrochenkoPatterns.Models.ResponseModels.Post
 {
     public class PostResponseModel
     {
         public int Id { get; set; }
+
+        public PostType Type { get; set; }
 
         public string Title { get; set; }
 
@@ -20,5 +25,8 @@
 
         // proverb
         public int? ImageId { get; set; }
+
+
+        public DateTime CreationDate { get; set; }
     }
 }
