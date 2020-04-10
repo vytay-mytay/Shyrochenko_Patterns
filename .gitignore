@@ -5,3 +5,8 @@ Logs
 obj
 bin
 /ShyrochenkoPatterns/.vs
+/ShyrochenkoPatterns/ShyrochenkoPatterns.Domain/packages.config
+/ShyrochenkoPatterns/ShyrochenkoPatterns.DAL/packages.config
+/ShyrochenkoPatterns/ShyrochenkoPatterns.Common/packages.config
+/ShyrochenkoPatterns/ShyrochenkoPatterns.Services/packages.config
+/ShyrochenkoPatterns/ShyrochenkoPatterns.Models/packages.config
