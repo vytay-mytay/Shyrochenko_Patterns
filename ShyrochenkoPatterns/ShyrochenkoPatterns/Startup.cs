@@ -31,10 +31,14 @@ using ShyrochenkoPatterns.Helpers.SwaggerFilters;
 using ShyrochenkoPatterns.Models.ResponseModels;
 using ShyrochenkoPatterns.ResourceLibrary;
 using ShyrochenkoPatterns.Services.Interfaces;
+using ShyrochenkoPatterns.Services.Interfaces.Bridge.Abstraction;
+using ShyrochenkoPatterns.Services.Interfaces.Bridge.Implementation;
 using ShyrochenkoPatterns.Services.Interfaces.Exporting;
 using ShyrochenkoPatterns.Services.Interfaces.External;
 using ShyrochenkoPatterns.Services.Interfaces.Prototype;
 using ShyrochenkoPatterns.Services.Services;
+using ShyrochenkoPatterns.Services.Services.Abstraction.Bridge;
+using ShyrochenkoPatterns.Services.Services.Bridge.Implementation;
 using ShyrochenkoPatterns.Services.Services.Exporting;
 using ShyrochenkoPatterns.Services.Services.External;
 using ShyrochenkoPatterns.Services.Services.Prototype;
@@ -106,6 +110,18 @@ namespace ShyrochenkoPatterns
             services.AddTransient<IS3Service, S3Service>();
             services.AddTransient<ICallService, CallService>();
             services.AddTransient<IPostPrototype, PostPrototype>();
+
+            services.AddTransient<IBridgeImplementation, BridgeAdminImplementation>();
+            services.AddTransient<IBridgeImplementation, BridgeUserEmailImplementation>();
+            services.AddTransient<IBridgeImplementation, BridgeUserPhoneImplementation>();
+            services.AddTransient<IBridgeImplementation, BridgeUserFacebookPhoneImplementation>();
+            services.AddTransient<IBridgeImplementation, BridgeUserFacebookEmailImplementation>();
+
+            services.AddTransient<IBridgeAbstraction, BridgeAdmin>();
+            services.AddTransient<IBridgeAbstraction, BridgeUserEmail>();
+            services.AddTransient<IBridgeAbstraction, BridgeUserPhone>();
+            services.AddTransient<IBridgeAbstraction, BridgeUserFacebookPhone>();
+            services.AddTransient<IBridgeAbstraction, BridgeUserFacebookEmail>();
 
             #endregion
 

@@ -1,8 +1,9 @@
+using ShyrochenkoPatterns.Models.RequestModels.Bridge;
 using System.ComponentModel.DataAnnotations;
 
 namespace ShyrochenkoPatterns.Models.RequestModels.Socials
 {
-    public class FacebookWithPhoneRequestModel
+    public class FacebookWithPhoneRequestModel : BridgeRegisterRequestModel, BridgeLoginRequestModel
     {
         [Required(ErrorMessage = "Token is empty")]
         public string Token { get; set; }

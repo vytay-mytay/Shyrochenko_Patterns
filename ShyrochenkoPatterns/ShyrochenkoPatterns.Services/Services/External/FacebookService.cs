@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ShyrochenkoPatterns.Common.Exceptions;
@@ -9,7 +8,6 @@ using ShyrochenkoPatterns.Domain.Entities.Identity;
 using ShyrochenkoPatterns.Models.Enums;
 using ShyrochenkoPatterns.Models.InternalModels;
 using ShyrochenkoPatterns.Models.RequestModels;
-using ShyrochenkoPatterns.Models.RequestModels.Socials;
 using ShyrochenkoPatterns.Models.ResponseModels;
 using ShyrochenkoPatterns.Services.Interfaces;
 using ShyrochenkoPatterns.Services.Interfaces.External;
@@ -52,19 +50,6 @@ namespace ShyrochenkoPatterns.Services.Services.External
                 IsActive = true,
                 RegistratedAt = DateTime.UtcNow,
                 PhoneNumberConfirmed = false,
-                FacebookId = data.FacebookId
-            };
-        }
-
-        private ApplicationUser CreateUserWithEmail(RegisterWithFacebookUsingEmailInternalModel data)
-        {
-            return new ApplicationUser
-            {
-                Email = data.Email,
-                UserName = data.Email,
-                IsActive = true,
-                RegistratedAt = DateTime.UtcNow,
-                EmailConfirmed = false,
                 FacebookId = data.FacebookId
             };
         }
@@ -126,131 +111,11 @@ namespace ShyrochenkoPatterns.Services.Services.External
             }
         }
 
-        public async Task<LoginResponseModel> ProcessRequest(FacebookWithPhoneRequestModel model)
-        {
-            var profile = await GetProfile(model.Token);
-
-            var userWithFacebook = _unitOfWork.Repository<ApplicationUser>().Get(x => x.FacebookId == profile.Id)
-                .Include(x => x.VerificationTokens)
-                .FirstOrDefault();
-
-            // If there is such user in DB - just return 
-            if (userWithFacebook != null)
-            {
-                var loginResponse = await _jwtService.BuildLoginResponse(userWithFacebook);
-
-                return loginResponse;
-            }
-            else if (userWithFacebook == null && model.PhoneNumber != null)
-            {
-                // Check if there is such user in DB, if so - add to it facebook id
-                var existingUser = _unitOfWork.Repository<ApplicationUser>().Find(x => x.PhoneNumber == model.PhoneNumber);
-
-                if (existingUser != null)
-                {
-                    existingUser.FacebookId = profile.Id;
-
-                    _unitOfWork.Repository<ApplicationUser>().Update(existingUser);
-                    _unitOfWork.SaveChanges();
-
-                    var loginResponse = await _jwtService.BuildLoginResponse(existingUser);
-
-                    return loginResponse;
-                }
-                else
-                {
-                    // In other case create VerificationCode with user data and send core to user
-                    try
-                    {
-                        var data = JsonConvert.SerializeObject(new RegisterWithFacebookUsingPhoneInternalModel
-                        {
-                            PhoneNumber = model.PhoneNumber,
-                            FacebookId = profile.Id
-                        }, new JsonSerializerSettings { Formatting = Formatting.Indented });
-
-                        await _smsService.SendVerificationCodeAsync(model.PhoneNumber, VerificationCodeType.ConfirmFacebook, data);
-                    }
-                    catch
-                    {
-                        throw new CustomException(HttpStatusCode.BadRequest, "phoneNumber", "Error while sending message");
-                    }
-
-                    throw new CustomException(HttpStatusCode.NoContent, "phoneNumber", "Verification code sent");
-                }
-            }
-            else
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "token", "There is no user with such facebook id");
-            }
-        }
-
         /*  ===== WARNING =====
             There is a case when first user has an account registered with specific email;
             Second user creates an account via Facebook (that has only phone number without email) and pass the same email to request model;
             Our app find existing user with this email, link new facebook to account of first user and gives tokens of second user to first user.
         */
-        public async Task<LoginResponseModel> ProcessRequest(FacebookWithEmailRequestModel model)
-        {
-            var profile = await GetProfile(model.Token);
 
-            var userWithFacebook = _unitOfWork.Repository<ApplicationUser>().Get(x => x.FacebookId == profile.Id)
-                .Include(x => x.VerificationTokens)
-                .FirstOrDefault();
-
-            var email = profile?.Email ?? model.Email;
-
-            // If there is such user in DB - just return 
-            if (userWithFacebook != null)
-            {
-                var loginResponse = await _jwtService.BuildLoginResponse(userWithFacebook);
-
-                return loginResponse;
-            }
-            else if (userWithFacebook == null && email != null)
-            {
-                // Check if there is such user in DB, if so - add to it facebook id
-                var existingUser = _unitOfWork.Repository<ApplicationUser>().Find(x => x.Email == email);
-
-                if (existingUser != null)
-                {
-                    existingUser.FacebookId = profile.Id;
-
-                    _unitOfWork.Repository<ApplicationUser>().Update(existingUser);
-                    _unitOfWork.SaveChanges();
-
-
-                    var loginResponse = await _jwtService.BuildLoginResponse(existingUser);
-
-                    return loginResponse;
-                }
-                else
-                {
-                    // In other case - create new user
-                    var user = CreateUserWithEmail(new RegisterWithFacebookUsingEmailInternalModel
-                    {
-                        Email = email,
-                        FacebookId = profile.Id
-                    });
-
-                    var result = await _userManager.CreateAsync(user);
-
-                    if (!result.Succeeded)
-                        throw new CustomException(HttpStatusCode.BadRequest, "general", result.Errors.FirstOrDefault().Description);
-
-                    result = await _userManager.AddToRoleAsync(user, Role.User);
-
-                    if (!result.Succeeded)
-                        throw new CustomException(HttpStatusCode.BadRequest, "general", result.Errors.FirstOrDefault().Description);
-
-                    var loginResponse = await _jwtService.BuildLoginResponse(user);
-
-                    return loginResponse;
-                }
-            }
-            else
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "token", "There is no user with such facebook id");
-            }
-        }
     }
 }

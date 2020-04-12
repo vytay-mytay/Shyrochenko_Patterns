@@ -8,8 +8,11 @@ using ShyrochenkoPatterns.Domain.Entities.Identity;
 using ShyrochenkoPatterns.Helpers.Attributes;
 using ShyrochenkoPatterns.Models.RequestModels;
 using ShyrochenkoPatterns.Models.ResponseModels;
+using ShyrochenkoPatterns.Models.ResponseModels.Bridge;
 using ShyrochenkoPatterns.ResourceLibrary;
 using ShyrochenkoPatterns.Services.Interfaces;
+using ShyrochenkoPatterns.Services.Interfaces.Bridge.Abstraction;
+using ShyrochenkoPatterns.Services.Services.Abstraction.Bridge;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
@@ -24,11 +27,17 @@ namespace ShyrochenkoPatterns.Controllers.API
     public class SessionsController : _BaseApiController
     {
         private IAccountService _accountService;
+        private IBridgeAbstraction _bridgeAbstractionUserEmail;
+        private IBridgeAbstraction _bridgeAbstractionUserPhone;
 
-        public SessionsController(IStringLocalizer<ErrorsResource> localizer, IAccountService accountService)
+        public SessionsController(IStringLocalizer<ErrorsResource> localizer, IAccountService accountService, IBridgeAbstraction bridgeAbstraction)
               : base(localizer)
         {
             _accountService = accountService;
+
+            _bridgeAbstractionUserEmail = bridgeAbstraction as BridgeUserEmail;
+            _bridgeAbstractionUserPhone = bridgeAbstraction as BridgeUserPhone;
+
         }
 
         // POST api/v1/sessions
@@ -56,9 +65,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [HttpPost]
         public async Task<IActionResult> Login([FromBody]LoginRequestModel model)
         {
-            var response = await _accountService.Login(model);
+            var response = await _bridgeAbstractionUserEmail.Login(model); // use bridge
 
-            return Json(new JsonResponse<LoginResponseModel>(response));
+            return Json(new JsonResponse<BridgeLoginResponseModel>(response));
         }
 
         #region Register_Phone
@@ -88,9 +97,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [HttpPost("Phone")]
         public async Task<IActionResult> Login([FromBody]LoginWithPhoneRequestModel model)
         {
-            var response = await _accountService.LoginUsingPhone(model);
+            var response = await _bridgeAbstractionUserPhone.Login(model); // use bridge
 
-            return Json(new JsonResponse<LoginResponseModel>(response));
+            return Json(new JsonResponse<BridgeLoginResponseModel>(response));
         }
 
         #endregion

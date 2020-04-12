@@ -42,48 +42,48 @@ namespace ShyrochenkoPatterns.Services.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<RegisterResponseModel> Register(RegisterRequestModel model)
-        {
-            model.Email = model.Email.Trim().ToLower();
-
-            ApplicationUser user = _unitOfWork.Repository<ApplicationUser>().Find(x => x.Email.ToLower() == model.Email);
-
-            if (user != null && user.EmailConfirmed)
-                throw new CustomException(HttpStatusCode.UnprocessableEntity, "email", "Email is already registered");
-
-            if (user == null)
-            {
-                user = new ApplicationUser
-                {
-                    Email = model.Email,
-                    UserName = model.Email,
-                    IsActive = true,
-                    RegistratedAt = DateTime.UtcNow,
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (!result.Succeeded)
-                    throw new CustomException(HttpStatusCode.BadRequest, "general", result.Errors.FirstOrDefault().Description);
-
-                result = await _userManager.AddToRoleAsync(user, Role.User);
-
-                if (!result.Succeeded)
-                    throw new CustomException(HttpStatusCode.BadRequest, "general", result.Errors.FirstOrDefault().Description);
-            }
-
-            try
-            {
-                await SendConfirmEmailLink(user);
-            }
-            catch (Exception ex)
-            {
-                await _userManager.DeleteAsync(user);
-                throw;
-            }
-
-            return new RegisterResponseModel { Email = user.Email };
-        }
+        //public async Task<RegisterResponseModel> Register(RegisterRequestModel model)
+        //{
+        //    model.Email = model.Email.Trim().ToLower();
+        //
+        //    ApplicationUser user = _unitOfWork.Repository<ApplicationUser>().Find(x => x.Email.ToLower() == model.Email);
+        //
+        //    if (user != null && user.EmailConfirmed)
+        //        throw new CustomException(HttpStatusCode.UnprocessableEntity, "email", "Email is already registered");
+        //
+        //    if (user == null)
+        //    {
+        //        user = new ApplicationUser
+        //        {
+        //            Email = model.Email,
+        //            UserName = model.Email,
+        //            IsActive = true,
+        //            RegistratedAt = DateTime.UtcNow,
+        //        };
+        //
+        //        var result = await _userManager.CreateAsync(user, model.Password);
+        //
+        //        if (!result.Succeeded)
+        //            throw new CustomException(HttpStatusCode.BadRequest, "general", result.Errors.FirstOrDefault().Description);
+        //
+        //        result = await _userManager.AddToRoleAsync(user, Role.User);
+        //
+        //        if (!result.Succeeded)
+        //            throw new CustomException(HttpStatusCode.BadRequest, "general", result.Errors.FirstOrDefault().Description);
+        //    }
+        //
+        //    try
+        //    {
+        //        await SendConfirmEmailLink(user);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await _userManager.DeleteAsync(user);
+        //        throw;
+        //    }
+        //
+        //    return new RegisterResponseModel { Email = user.Email };
+        //}
 
         public async Task<RegisterUsingPhoneResponseModel> RegisterUsingPhone(RegisterUsingPhoneRequestModel model)
         {
@@ -176,60 +176,60 @@ namespace ShyrochenkoPatterns.Services.Services
             return await _jwtService.BuildLoginResponse(user);
         }
 
-        public async Task<LoginResponseModel> Login(LoginRequestModel model)
-        {
-            var user = _unitOfWork.Repository<ApplicationUser>().Get(x => x.Email == model.Email)
-                .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
-                .FirstOrDefault();
+        //public async Task<LoginResponseModel> Login(LoginRequestModel model)
+        //{
+        //    var user = _unitOfWork.Repository<ApplicationUser>().Get(x => x.Email == model.Email)
+        //        .Include(x => x.UserRoles)
+        //            .ThenInclude(x => x.Role)
+        //        .FirstOrDefault();
+        //
+        //    if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.UserRoles.Any(x => x.Role.Name == Role.User))
+        //        throw new CustomException(HttpStatusCode.BadRequest, "credentials", "Invalid credentials");
+        //
+        //    if (!string.IsNullOrEmpty(model.Email) && !user.EmailConfirmed)
+        //        throw new CustomException(HttpStatusCode.BadRequest, "email", "Email is not confirmed");
+        //
+        //    if (user.IsDeleted)
+        //        throw new CustomException(HttpStatusCode.BadRequest, "general", "Your account was deleted by admin, to know more please contact administration.");
+        //
+        //    if (!user.IsActive)
+        //        throw new CustomException(HttpStatusCode.MethodNotAllowed, "general", "Your account was blocked. For more information please email to following address: ");
+        //
+        //    return await _jwtService.BuildLoginResponse(user, model.AccessTokenLifetime);
+        //}
 
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.UserRoles.Any(x => x.Role.Name == Role.User))
-                throw new CustomException(HttpStatusCode.BadRequest, "credentials", "Invalid credentials");
+        //public async Task<LoginResponseModel> LoginUsingPhone(LoginWithPhoneRequestModel model)
+        //{
+        //    var user = _unitOfWork.Repository<ApplicationUser>().Find(x => x.PhoneNumber == model.PhoneNumber);
+        //
+        //    if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+        //        throw new CustomException(HttpStatusCode.BadRequest, "credentials", "Invalid credentials");
+        //
+        //    if (!user.PhoneNumberConfirmed)
+        //        throw new CustomException(HttpStatusCode.BadRequest, "phoneNumber", "PhoneNumber is not confirmed");
+        //
+        //    if (user.IsDeleted)
+        //        throw new CustomException(HttpStatusCode.BadRequest, "general", "Your account was deleted by admin, to know more please contact administration.");
+        //
+        //    if (!user.IsActive)
+        //        throw new CustomException(HttpStatusCode.MethodNotAllowed, "general", "Your account was blocked. For more information please email to following address: ");
+        //
+        //    return await _jwtService.BuildLoginResponse(user, model.AccessTokenLifetime);
+        //}
 
-            if (!string.IsNullOrEmpty(model.Email) && !user.EmailConfirmed)
-                throw new CustomException(HttpStatusCode.BadRequest, "email", "Email is not confirmed");
-
-            if (user.IsDeleted)
-                throw new CustomException(HttpStatusCode.BadRequest, "general", "Your account was deleted by admin, to know more please contact administration.");
-
-            if (!user.IsActive)
-                throw new CustomException(HttpStatusCode.MethodNotAllowed, "general", "Your account was blocked. For more information please email to following address: ");
-
-            return await _jwtService.BuildLoginResponse(user, model.AccessTokenLifetime);
-        }
-
-        public async Task<LoginResponseModel> LoginUsingPhone(LoginWithPhoneRequestModel model)
-        {
-            var user = _unitOfWork.Repository<ApplicationUser>().Find(x => x.PhoneNumber == model.PhoneNumber);
-
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-                throw new CustomException(HttpStatusCode.BadRequest, "credentials", "Invalid credentials");
-
-            if (!user.PhoneNumberConfirmed)
-                throw new CustomException(HttpStatusCode.BadRequest, "phoneNumber", "PhoneNumber is not confirmed");
-
-            if (user.IsDeleted)
-                throw new CustomException(HttpStatusCode.BadRequest, "general", "Your account was deleted by admin, to know more please contact administration.");
-
-            if (!user.IsActive)
-                throw new CustomException(HttpStatusCode.MethodNotAllowed, "general", "Your account was blocked. For more information please email to following address: ");
-
-            return await _jwtService.BuildLoginResponse(user, model.AccessTokenLifetime);
-        }
-
-        public async Task<LoginResponseModel> AdminLogin(AdminLoginRequestModel model)
-        {
-            var user = _unitOfWork.Repository<ApplicationUser>().Get(x => x.Email == model.Email)
-                .TagWith(nameof(Login) + "_GetAdmin")
-                .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
-                .FirstOrDefault();
-
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.UserRoles.Any(x => x.Role.Name == Role.Admin || x.Role.Name == Role.SuperAdmin))
-                throw new CustomException(HttpStatusCode.BadRequest, "general", "Invalid credentials");
-
-            return await _jwtService.BuildLoginResponse(user, model.AccessTokenLifetime);
-        }
+        //public async Task<LoginResponseModel> AdminLogin(AdminLoginRequestModel model)
+        //{
+        //    var user = _unitOfWork.Repository<ApplicationUser>().Get(x => x.Email == model.Email)
+        //        .TagWith(nameof(Login) + "_GetAdmin")
+        //        .Include(x => x.UserRoles)
+        //            .ThenInclude(x => x.Role)
+        //        .FirstOrDefault();
+        //
+        //    if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.UserRoles.Any(x => x.Role.Name == Role.Admin || x.Role.Name == Role.SuperAdmin))
+        //        throw new CustomException(HttpStatusCode.BadRequest, "general", "Invalid credentials");
+        //
+        //    return await _jwtService.BuildLoginResponse(user, model.AccessTokenLifetime);
+        //}
 
         public async Task<TokenResponseModel> RefreshTokenAsync(string refreshToken)
         {

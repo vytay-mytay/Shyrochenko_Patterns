@@ -9,9 +9,9 @@ namespace ShyrochenkoPatterns.Services.Interfaces.External
     {
         Task<FBProfileResponseModel> GetProfile(string token);
 
-        Task<LoginResponseModel> ProcessRequest(FacebookWithPhoneRequestModel model);
+        //Task<LoginResponseModel> ProcessRequest(FacebookWithPhoneRequestModel model);
 
-        Task<LoginResponseModel> ProcessRequest(FacebookWithEmailRequestModel model);
+        //Task<LoginResponseModel> ProcessRequest(FacebookWithEmailRequestModel model);
 
         Task<LoginResponseModel> ConfirmFacebookRegistration(ConfirmPhoneRequestModel model);
     }

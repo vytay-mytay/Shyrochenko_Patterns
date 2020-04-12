@@ -10,9 +10,12 @@ using ShyrochenkoPatterns.Helpers.Attributes;
 using ShyrochenkoPatterns.Models.RequestModels;
 using ShyrochenkoPatterns.Models.RequestModels.Socials;
 using ShyrochenkoPatterns.Models.ResponseModels;
+using ShyrochenkoPatterns.Models.ResponseModels.Bridge;
 using ShyrochenkoPatterns.ResourceLibrary;
 using ShyrochenkoPatterns.Services.Interfaces;
+using ShyrochenkoPatterns.Services.Interfaces.Bridge.Abstraction;
 using ShyrochenkoPatterns.Services.Interfaces.External;
+using ShyrochenkoPatterns.Services.Services.Abstraction.Bridge;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
@@ -31,9 +34,12 @@ namespace ShyrochenkoPatterns.Controllers.API
         private ILinkedInService _linkedInService;
         private IUnitOfWork _unitOfWork;
         private ILogger<SocialsController> _logger;
+        private IBridgeAbstraction _bridgeAbstractionUserFacebookPhone;
+        private IBridgeAbstraction _bridgeAbstractionUserFacebookEmail;
 
         public SocialsController(IStringLocalizer<ErrorsResource> localizer, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork,
-            IJWTService jwtService, IGoogleService googleService, IFacebookService facebookService, ILinkedInService linkedInService, ILogger<SocialsController> logger)
+            IJWTService jwtService, IGoogleService googleService, IFacebookService facebookService, ILinkedInService linkedInService, ILogger<SocialsController> logger,
+            IBridgeAbstraction bridgeAbstraction)
             : base(localizer)
         {
             _userManager = userManager;
@@ -43,6 +49,8 @@ namespace ShyrochenkoPatterns.Controllers.API
             _linkedInService = linkedInService;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _bridgeAbstractionUserFacebookPhone = bridgeAbstraction as BridgeUserFacebookPhone;
+            _bridgeAbstractionUserFacebookEmail = bridgeAbstraction as BridgeUserFacebookEmail;
         }
 
         #region Register_Phone Google
@@ -259,9 +267,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [HttpPost("Sessions/Facebook")]
         public async Task<IActionResult> Facebook([FromBody]FacebookWithEmailRequestModel model)
         {
-            var response = await _facebookService.ProcessRequest(model);
+            var response = await _bridgeAbstractionUserFacebookEmail.Login(model); // use bridge
 
-            return Json(new JsonResponse<LoginResponseModel>(response));
+            return Json(new JsonResponse<BridgeLoginResponseModel>(response));
         }
 
         #endregion
@@ -275,7 +283,7 @@ namespace ShyrochenkoPatterns.Controllers.API
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/sessions/phone/facebook
+        //;2/     POST api/v1/sessions/phone/facebook
         ///     {  
         ///         "phoneNumber" : "+447555557777",
         ///         "token" : "1111"
@@ -291,9 +299,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [HttpPost("Sessions/Phone/Facebook")]
         public async Task<IActionResult> Facebook([FromBody]FacebookWithPhoneRequestModel model)
         {
-            var response = await _facebookService.ProcessRequest(model);
+            var response = await _bridgeAbstractionUserFacebookPhone.Login(model); // use bridge
 
-            return Json(new JsonResponse<LoginResponseModel>(response));
+            return Json(new JsonResponse<BridgeLoginResponseModel>(response));
         }
 
         // PUT api/v1/socials/sessions/phone/facebook/confirm

@@ -1,8 +1,9 @@
 using Newtonsoft.Json;
+using ShyrochenkoPatterns.Models.ResponseModels.Bridge;
 
 namespace ShyrochenkoPatterns.Models.ResponseModels
 {
-    public class LoginResponseModel
+    public class LoginResponseModel : BridgeLoginResponseModel
     {
         [JsonRequired]
         public int Id { get; set; }
