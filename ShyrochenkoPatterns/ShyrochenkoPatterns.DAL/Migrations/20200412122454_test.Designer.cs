@@ -10,8 +10,8 @@ using ShyrochenkoPatterns.DAL;
 namespace ShyrochenkoPatterns.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200410195417_Post_Proverb_Story")]
-    partial class Post_Proverb_Story
+    [Migration("20200412122454_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

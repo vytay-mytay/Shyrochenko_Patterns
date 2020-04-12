@@ -1,9 +1,10 @@
 using ShyrochenkoPatterns.Common.Attributes;
+using ShyrochenkoPatterns.Models.RequestModels.Bridge;
 using System.ComponentModel.DataAnnotations;
 
 namespace ShyrochenkoPatterns.Models.RequestModels
 {
-    public class RegisterRequestModel : EmailRequestModel
+    public class RegisterRequestModel : EmailRequestModel, BridgeRegisterRequestModel
     {
         [CustomRegularExpression(ModelRegularExpression.REG_ONE_LATER_DIGIT, ErrorMessage = "Password should contain at least one letter and one digit")]
         [CustomRegularExpression(ModelRegularExpression.REG_NOT_CONTAIN_SPACES_ONLY, ErrorMessage = "Password can’t contain spaces only")]

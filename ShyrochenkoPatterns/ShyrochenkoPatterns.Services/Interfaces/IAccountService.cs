@@ -9,7 +9,7 @@ namespace ShyrochenkoPatterns.Services.Interfaces
     {
         Task<TokenResponseModel> RefreshTokenAsync(string refreshToken);
 
-        Task<RegisterResponseModel> Register(RegisterRequestModel model);
+        //Task<RegisterResponseModel> Register(RegisterRequestModel model);
 
         Task<RegisterUsingPhoneResponseModel> RegisterUsingPhone(RegisterUsingPhoneRequestModel model);
 
@@ -17,11 +17,11 @@ namespace ShyrochenkoPatterns.Services.Interfaces
 
         Task<LoginResponseModel> ConfirmPhone(ConfirmPhoneRequestModel model);
 
-        Task<LoginResponseModel> Login(LoginRequestModel model);
+        //Task<LoginResponseModel> Login(LoginRequestModel model);
 
-        Task<LoginResponseModel> LoginUsingPhone(LoginWithPhoneRequestModel model);
+        //Task<LoginResponseModel> LoginUsingPhone(LoginWithPhoneRequestModel model);
 
-        Task<LoginResponseModel> AdminLogin(AdminLoginRequestModel model);
+        //Task<LoginResponseModel> AdminLogin(AdminLoginRequestModel model);
 
         Task Logout(int userId);
 

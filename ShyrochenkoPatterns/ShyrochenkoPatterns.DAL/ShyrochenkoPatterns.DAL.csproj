@@ -26,6 +26,10 @@
     <Compile Remove="Migrations\20200322184201_Create_Post_Proverb_Story.Designer.cs" />
     <Compile Remove="Migrations\20200322185631_Create_Post_Proverb_Story.cs" />
     <Compile Remove="Migrations\20200322185631_Create_Post_Proverb_Story.Designer.cs" />
+    <Compile Remove="Migrations\20200410195417_Post_Proverb_Story.cs" />
+    <Compile Remove="Migrations\20200410195417_Post_Proverb_Story.Designer.cs" />
+    <Compile Remove="Migrations\20200412121538_test.cs" />
+    <Compile Remove="Migrations\20200412121538_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

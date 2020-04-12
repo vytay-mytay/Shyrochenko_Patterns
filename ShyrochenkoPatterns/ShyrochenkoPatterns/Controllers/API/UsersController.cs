@@ -7,8 +7,11 @@ using ShyrochenkoPatterns.Common.Extensions;
 using ShyrochenkoPatterns.Helpers.Attributes;
 using ShyrochenkoPatterns.Models.RequestModels;
 using ShyrochenkoPatterns.Models.ResponseModels;
+using ShyrochenkoPatterns.Models.ResponseModels.Bridge;
 using ShyrochenkoPatterns.ResourceLibrary;
 using ShyrochenkoPatterns.Services.Interfaces;
+using ShyrochenkoPatterns.Services.Interfaces.Bridge.Abstraction;
+using ShyrochenkoPatterns.Services.Services.Abstraction.Bridge;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
@@ -25,11 +28,17 @@ namespace ShyrochenkoPatterns.Controllers.API
         private IUserService _userService;
         private IAccountService _accountService;
 
-        public UsersController(IStringLocalizer<ErrorsResource> localizer, IUserService userService, IAccountService accountService)
+        private IBridgeAbstraction _bridgeAbstractionUserEmail;
+        private IBridgeAbstraction _bridgeAbstractionUserPhone;
+
+        public UsersController(IStringLocalizer<ErrorsResource> localizer, IUserService userService, IAccountService accountService, IBridgeAbstraction bridgeAbstraction)
              : base(localizer)
         {
             _userService = userService;
             _accountService = accountService;
+
+            _bridgeAbstractionUserEmail = bridgeAbstraction as BridgeUserEmail;
+            _bridgeAbstractionUserEmail = bridgeAbstraction as BridgeUserPhone;
         }
 
         // POST api/v1/users
@@ -58,9 +67,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [Validate]
         public async Task<IActionResult> Register([FromBody]RegisterRequestModel model)
         {
-            var response = await _accountService.Register(model);
-            
-            return Json(new JsonResponse<RegisterResponseModel>(response));
+            var response = await _bridgeAbstractionUserEmail.Register(model); // use bridge
+
+            return Json(new JsonResponse<BridgeRegisterResponseModel>(response));
         }
 
         #region Register_Phone
@@ -92,9 +101,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [HttpPost("Phone")]
         public async Task<IActionResult> Register([FromBody]RegisterUsingPhoneRequestModel model)
         {
-            var response = await _accountService.RegisterUsingPhone(model);
+            var response = await _bridgeAbstractionUserPhone.Register(model); // use bridge
 
-            return Json(new JsonResponse<RegisterUsingPhoneResponseModel>(response));
+            return Json(new JsonResponse<BridgeRegisterResponseModel>(response));
         }
 
         #endregion
