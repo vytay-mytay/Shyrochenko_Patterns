@@ -3,11 +3,14 @@ using ShyrochenkoPatterns.Domain.Entities;
 using ShyrochenkoPatterns.Domain.Entities.Chat;
 using ShyrochenkoPatterns.Domain.Entities.Identity;
 using ShyrochenkoPatterns.Domain.Entities.Post;
+using ShyrochenkoPatterns.Models.Composite;
 using ShyrochenkoPatterns.Models.Enums;
 using ShyrochenkoPatterns.Models.RequestModels;
+using ShyrochenkoPatterns.Models.RequestModels.Composite;
 using ShyrochenkoPatterns.Models.RequestModels.Posts;
 using ShyrochenkoPatterns.Models.ResponseModels;
 using ShyrochenkoPatterns.Models.ResponseModels.Chat;
+using ShyrochenkoPatterns.Models.ResponseModels.Composite;
 using ShyrochenkoPatterns.Models.ResponseModels.Post;
 using Profile = ShyrochenkoPatterns.Domain.Entities.Identity.Profile;
 
