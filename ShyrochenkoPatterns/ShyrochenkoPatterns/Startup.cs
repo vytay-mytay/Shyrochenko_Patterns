@@ -35,12 +35,14 @@ using ShyrochenkoPatterns.Services.Interfaces.Bridge.Abstraction;
 using ShyrochenkoPatterns.Services.Interfaces.Bridge.Implementation;
 using ShyrochenkoPatterns.Services.Interfaces.Exporting;
 using ShyrochenkoPatterns.Services.Interfaces.External;
+using ShyrochenkoPatterns.Services.Interfaces.Facade;
 using ShyrochenkoPatterns.Services.Interfaces.Prototype;
 using ShyrochenkoPatterns.Services.Services;
 using ShyrochenkoPatterns.Services.Services.Abstraction.Bridge;
 using ShyrochenkoPatterns.Services.Services.Bridge.Implementation;
 using ShyrochenkoPatterns.Services.Services.Exporting;
 using ShyrochenkoPatterns.Services.Services.External;
+using ShyrochenkoPatterns.Services.Services.Facade;
 using ShyrochenkoPatterns.Services.Services.Prototype;
 using ShyrochenkoPatterns.Services.StartApp;
 using Swashbuckle.AspNetCore.Filters;
@@ -122,6 +124,11 @@ namespace ShyrochenkoPatterns
             services.AddTransient<IBridgeAbstraction, BridgeUserPhone>();
             services.AddTransient<IBridgeAbstraction, BridgeUserFacebookPhone>();
             services.AddTransient<IBridgeAbstraction, BridgeUserFacebookEmail>();
+
+            services.AddTransient<IScaner, Scaner>();
+            services.AddTransient<IPrinter, Printer>();
+            services.AddTransient<ICopier, Copier>();
+            services.AddTransient<IMFU, MFU>();
 
             #endregion
 
