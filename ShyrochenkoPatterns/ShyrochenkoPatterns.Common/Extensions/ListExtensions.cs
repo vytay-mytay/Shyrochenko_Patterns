@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShyrochenkoPatterns.Common.Extensions
 {
@@ -11,6 +7,15 @@ namespace ShyrochenkoPatterns.Common.Extensions
         public static List<TResult> Empty<TResult>(this List<TResult> list)
         {
             return new List<TResult>();
+        }
+
+        public static List<TResult> Replace<TResult>(this List<TResult> list, TResult oldItem, TResult newItem)
+        {
+            int index = list.IndexOf(oldItem);
+            if (index != -1)
+                list[index] = newItem;
+
+            return list;
         }
     }
 }

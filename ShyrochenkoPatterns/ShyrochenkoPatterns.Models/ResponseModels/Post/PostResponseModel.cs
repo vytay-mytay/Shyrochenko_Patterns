@@ -22,6 +22,8 @@ namespace ShyrochenkoPatterns.Models.ResponseModels.Post
 
         public int? PartNumber { get; set; }
 
+        public int? AuthorId { get; set; }
+
 
         // proverb
         public int? ImageId { get; set; }

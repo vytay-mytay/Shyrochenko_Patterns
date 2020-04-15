@@ -1,7 +1,6 @@
 ﻿using ShyrochenkoPatterns.Models.Post;
 using ShyrochenkoPatterns.Models.Post.PostTypes;
 using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ShyrochenkoPatterns.Domain.Entities.Post
@@ -18,9 +17,6 @@ namespace ShyrochenkoPatterns.Domain.Entities.Post
         public string Text { get; set; }
 
         public DateTime CreationDate { get; set; }
-
-        [DefaultValue(0)]
-        public int LikeCount { get; set; }
 
         public Proverb()
         { }

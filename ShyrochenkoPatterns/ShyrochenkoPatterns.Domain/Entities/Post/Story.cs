@@ -1,7 +1,10 @@
-﻿using ShyrochenkoPatterns.Models.Post;
+﻿using ShyrochenkoPatterns.Domain.Entities.Identity;
+using ShyrochenkoPatterns.Models.Post;
 using ShyrochenkoPatterns.Models.Post.PostTypes;
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShyrochenkoPatterns.Domain.Entities.Post
 {
@@ -19,6 +22,15 @@ namespace ShyrochenkoPatterns.Domain.Entities.Post
         public string Text { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public int AuthorId { get; set; }
+
+        [DefaultValue(0)]
+        public int LikeCount { get; set; }
+
+        [ForeignKey("AuthorId")]
+        [InverseProperty("Stories")]
+        public virtual ApplicationUser Author { get; set; }
 
         public Story()
         { }

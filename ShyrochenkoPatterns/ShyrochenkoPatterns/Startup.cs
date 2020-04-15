@@ -132,7 +132,7 @@ namespace ShyrochenkoPatterns
             services.AddTransient<ICopier, Copier>();
             services.AddTransient<IMFU, MFU>();
 
-            services.AddTransient<ILikeService, LikeService>();
+            services.AddTransient<IReadStoryService, ReadStoryService>();
             services.AddTransient<IProxy, Proxy>();
 
             #endregion
