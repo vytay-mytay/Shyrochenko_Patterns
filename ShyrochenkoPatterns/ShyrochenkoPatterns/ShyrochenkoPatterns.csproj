@@ -54,13 +54,7 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="Views\Home\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\EmailTemplates\ConfirmEmail.html" />
-    <None Include="wwwroot\EmailTemplates\Registration.html" />
-    <None Include="wwwroot\EmailTemplates\ResetPassword.html" />
-    <None Include="wwwroot\HtmlContentTemplates\HtmlLayout.html" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -39,7 +39,7 @@ namespace ShyrochenkoPatterns.Controllers.API
 
         public SocialsController(IStringLocalizer<ErrorsResource> localizer, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork,
             IJWTService jwtService, IGoogleService googleService, IFacebookService facebookService, ILinkedInService linkedInService, ILogger<SocialsController> logger,
-            IBridgeAbstraction bridgeAbstraction)
+            IBridgeAbstraction bridgeAbstraction1, IBridgeAbstraction bridgeAbstraction2)
             : base(localizer)
         {
             _userManager = userManager;
@@ -49,8 +49,8 @@ namespace ShyrochenkoPatterns.Controllers.API
             _linkedInService = linkedInService;
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _bridgeAbstractionUserFacebookPhone = bridgeAbstraction as BridgeUserFacebookPhone;
-            _bridgeAbstractionUserFacebookEmail = bridgeAbstraction as BridgeUserFacebookEmail;
+            _bridgeAbstractionUserFacebookPhone = bridgeAbstraction1 as BridgeUserFacebookPhone;
+            _bridgeAbstractionUserFacebookEmail = bridgeAbstraction2 as BridgeUserFacebookEmail;
         }
 
         #region Register_Phone Google

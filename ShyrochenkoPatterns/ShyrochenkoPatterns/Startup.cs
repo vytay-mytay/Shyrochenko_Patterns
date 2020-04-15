@@ -113,19 +113,70 @@ namespace ShyrochenkoPatterns
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IS3Service, S3Service>();
             services.AddTransient<ICallService, CallService>();
+            
             services.AddTransient<IPostPrototype, PostPrototype>();
 
-            services.AddTransient<IBridgeImplementation, BridgeAdminImplementation>();
-            services.AddTransient<IBridgeImplementation, BridgeUserEmailImplementation>();
-            services.AddTransient<IBridgeImplementation, BridgeUserPhoneImplementation>();
-            services.AddTransient<IBridgeImplementation, BridgeUserFacebookPhoneImplementation>();
-            services.AddTransient<IBridgeImplementation, BridgeUserFacebookEmailImplementation>();
+            //services.AddScoped<IBridgeImplementation, BridgeAdminImplementation>();
+            //services.AddScoped<IBridgeImplementation, BridgeUserEmailImplementation>();
+            //services.AddScoped<IBridgeImplementation, BridgeUserPhoneImplementation>();
+            //services.AddScoped<IBridgeImplementation, BridgeUserFacebookPhoneImplementation>();
+            //services.AddScoped<IBridgeImplementation, BridgeUserFacebookEmailImplementation>();
 
-            services.AddTransient<IBridgeAbstraction, BridgeAdmin>();
-            services.AddTransient<IBridgeAbstraction, BridgeUserEmail>();
-            services.AddTransient<IBridgeAbstraction, BridgeUserPhone>();
-            services.AddTransient<IBridgeAbstraction, BridgeUserFacebookPhone>();
-            services.AddTransient<IBridgeAbstraction, BridgeUserFacebookEmail>();
+            services.AddSingleton<BridgeAdminImplementation>();
+            services.AddSingleton<BridgeUserEmailImplementation>();
+            services.AddSingleton<BridgeUserPhoneImplementation>();
+            services.AddSingleton<BridgeUserFacebookPhoneImplementation>();
+            services.AddSingleton<BridgeUserFacebookEmailImplementation>();
+
+            services.AddTransient<Func<string, IBridgeImplementation>>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case "Admin":
+                        return serviceProvider.GetService<BridgeAdminImplementation>();
+                    case "UserEmail":
+                        return serviceProvider.GetService<BridgeUserEmailImplementation>();
+                    case "UserPhone":
+                        return serviceProvider.GetService<BridgeUserPhoneImplementation>();
+                    case "FacebookPhone":
+                        return serviceProvider.GetService<BridgeUserFacebookPhoneImplementation>();
+                    case "FacebookEmail":
+                        return serviceProvider.GetService<BridgeUserFacebookEmailImplementation>();
+                    default:
+                        return serviceProvider.GetService<BridgeUserEmailImplementation>(); // вот тут может быть опасно
+                }
+            });
+
+            services.AddSingleton<BridgeAdmin>();
+            services.AddSingleton<BridgeUserEmail>();
+            services.AddSingleton<BridgeUserPhone>();
+            services.AddSingleton<BridgeUserFacebookPhone>();
+            services.AddSingleton<BridgeUserFacebookEmail>();
+
+            services.AddTransient<Func<string, IBridgeAbstraction>>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case "Admin":
+                        return serviceProvider.GetService<BridgeAdmin>();
+                    case "UserEmail":
+                        return serviceProvider.GetService<BridgeUserEmail>();
+                    case "UserPhone":
+                        return serviceProvider.GetService<BridgeUserPhone>();
+                    case "FacebookPhone":
+                        return serviceProvider.GetService<BridgeUserFacebookPhone>();
+                    case "FacebookEmail":
+                        return serviceProvider.GetService<BridgeUserFacebookEmail>();
+                    default:
+                        return serviceProvider.GetService<BridgeUserEmail>(); // вот тут может быть опасно
+                }
+            });
+
+            //services.AddScoped<IBridgeAbstraction, BridgeAdmin>();
+            //services.AddScoped<IBridgeAbstraction, BridgeUserEmail>();
+            //services.AddScoped<IBridgeAbstraction, BridgeUserPhone>();
+            //services.AddScoped<IBridgeAbstraction, BridgeUserFacebookPhone>();
+            //services.AddScoped<IBridgeAbstraction, BridgeUserFacebookEmail>();
 
             services.AddTransient<IScaner, Scaner>();
             services.AddTransient<IPrinter, Printer>();

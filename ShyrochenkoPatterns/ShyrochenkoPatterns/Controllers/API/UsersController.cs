@@ -3,16 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using ShyrochenkoPatterns.Common.Constants;
-using ShyrochenkoPatterns.Common.Extensions;
 using ShyrochenkoPatterns.Helpers.Attributes;
+using ShyrochenkoPatterns.Models.Enums;
 using ShyrochenkoPatterns.Models.RequestModels;
 using ShyrochenkoPatterns.Models.ResponseModels;
 using ShyrochenkoPatterns.Models.ResponseModels.Bridge;
 using ShyrochenkoPatterns.ResourceLibrary;
-using ShyrochenkoPatterns.Services.Interfaces;
 using ShyrochenkoPatterns.Services.Interfaces.Bridge.Abstraction;
-using ShyrochenkoPatterns.Services.Services.Abstraction.Bridge;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Threading.Tasks;
 
 namespace ShyrochenkoPatterns.Controllers.API
@@ -25,20 +24,14 @@ namespace ShyrochenkoPatterns.Controllers.API
     [Validate]
     public class UsersController : _BaseApiController
     {
-        private IUserService _userService;
-        private IAccountService _accountService;
+        private readonly Func<string, IBridgeAbstraction> _bridgeAbstractionUserPhone;
+        private readonly Func<string, IBridgeAbstraction> _bridgeAbstractionUserEmail;
 
-        private IBridgeAbstraction _bridgeAbstractionUserEmail;
-        private IBridgeAbstraction _bridgeAbstractionUserPhone;
-
-        public UsersController(IStringLocalizer<ErrorsResource> localizer, IUserService userService, IAccountService accountService, IBridgeAbstraction bridgeAbstraction)
+        public UsersController(IStringLocalizer<ErrorsResource> localizer, Func<string, IBridgeAbstraction> bridgeAbstractionEmail, Func<string, IBridgeAbstraction> bridgeAbstractionPhone)
              : base(localizer)
         {
-            _userService = userService;
-            _accountService = accountService;
-
-            _bridgeAbstractionUserEmail = bridgeAbstraction as BridgeUserEmail;
-            _bridgeAbstractionUserEmail = bridgeAbstraction as BridgeUserPhone;
+            _bridgeAbstractionUserEmail = bridgeAbstractionEmail;
+            _bridgeAbstractionUserPhone = bridgeAbstractionPhone;
         }
 
         // POST api/v1/users
@@ -67,7 +60,7 @@ namespace ShyrochenkoPatterns.Controllers.API
         [Validate]
         public async Task<IActionResult> Register([FromBody]RegisterRequestModel model)
         {
-            var response = await _bridgeAbstractionUserEmail.Register(model); // use bridge
+            var response = await _bridgeAbstractionUserEmail(BridgeType.UserEmail).Register(model); // use bridge
 
             return Json(new JsonResponse<BridgeRegisterResponseModel>(response));
         }
@@ -101,117 +94,9 @@ namespace ShyrochenkoPatterns.Controllers.API
         [HttpPost("Phone")]
         public async Task<IActionResult> Register([FromBody]RegisterUsingPhoneRequestModel model)
         {
-            var response = await _bridgeAbstractionUserPhone.Register(model); // use bridge
+            var response = await _bridgeAbstractionUserPhone(BridgeType.UserPhone).Register(model); // use bridge
 
             return Json(new JsonResponse<BridgeRegisterResponseModel>(response));
-        }
-
-        #endregion
-
-        // POST api/v1/users/me/devices
-        /// <summary>
-        /// Add new Device
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST api/v1/users/me/devices
-        ///     {                
-        ///        "deviceToken": "token"
-        ///     }
-        ///
-        /// </remarks>
-        /// <returns>HTTP 200 and message if device added, or HTTP 400 with errors</returns>
-        [SwaggerResponse(200, ResponseMessages.LinkSent, typeof(JsonResponse<UserDeviceResponseModel>))]
-        [SwaggerResponse(400, ResponseMessages.InvalidData, typeof(ErrorResponseModel))]
-        [SwaggerResponse(401, ResponseMessages.Unauthorized, typeof(ErrorResponseModel))]
-        [SwaggerResponse(500, ResponseMessages.InternalServerError, typeof(ErrorResponseModel))]
-        [HttpPost("Me/Devices")]
-        public async Task<IActionResult> SetDeviceToken([FromBody]DeviceTokenRequestModel model)
-        {
-            var response = await _userService.SetDeviceToken(model, User.GetUserId());
-
-            return Json(new JsonResponse<UserDeviceResponseModel>(response));
-        }
-
-        // PUT api/v1/users/me/password
-        /// <summary>
-        /// Change user password
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     PUT api/v1/users/me/password
-        ///     {                
-        ///        "oldPassword": "qwerty",
-        ///        "password": "111111",
-        ///        "confirmPassword": "111111"
-        ///     }
-        ///
-        /// </remarks>
-        /// <returns>HTTP 200 and confirmation message, or HTTP 400 with errors</returns>
-        [SwaggerResponse(200, ResponseMessages.RequestSuccessful, typeof(JsonResponse<MessageResponseModel>))]
-        [SwaggerResponse(400, ResponseMessages.InvalidData, typeof(ErrorResponseModel))]
-        [SwaggerResponse(401, ResponseMessages.Unauthorized, typeof(ErrorResponseModel))]
-        [SwaggerResponse(500, ResponseMessages.InternalServerError, typeof(ErrorResponseModel))]
-        [HttpPut("Me/Password")]
-        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordRequestModel model)
-        {
-            await _accountService.ChangePassword(model, User.GetUserId());
-
-            return Json(new JsonResponse<MessageResponseModel>(new MessageResponseModel("Password has been changed")));
-        }
-
-        #region Profile
-
-        // GET api/v1/users/me/profile
-        /// <summary>
-        /// Get my profile
-        /// </summary>
-        /// <returns>A user profile</returns>   
-        [SwaggerResponse(200, ResponseMessages.RequestSuccessful, typeof(JsonResponse<UserProfileResponseModel>))]
-        [SwaggerResponse(401, ResponseMessages.Unauthorized, typeof(ErrorResponseModel))]
-        [SwaggerResponse(500, ResponseMessages.InternalServerError, typeof(ErrorResponseModel))]
-        [HttpGet("Me/Profile")]
-        public async Task<IActionResult> GetMyProfile()
-        {
-            var data = await _userService.GetProfileAsync(User.GetUserId());
-
-            return Json(new JsonResponse<UserProfileResponseModel>(data));
-        }
-
-        // PATCH api/v1/users/me/profile
-        /// <summary>
-        /// Edit profile
-        /// </summary>
-        /// <param name="model">User profile</param>
-        /// <returns>A user profile</returns> 
-        [SwaggerResponse(200, ResponseMessages.RequestSuccessful, typeof(JsonResponse<UserProfileResponseModel>))]
-        [SwaggerResponse(400, ResponseMessages.InvalidData, typeof(ErrorResponseModel))]
-        [SwaggerResponse(401, ResponseMessages.Unauthorized, typeof(ErrorResponseModel))]
-        [SwaggerResponse(500, ResponseMessages.InternalServerError, typeof(ErrorResponseModel))]
-        [HttpPatch("Me/Profile")]
-        public async Task<IActionResult> EditMyProfile([FromBody]UserProfileRequestModel model)
-        {
-            var data = await _userService.EditProfileAsync(User.GetUserId(), model);
-
-            return Json(new JsonResponse<UserProfileResponseModel>(data));
-        }
-
-        // DELETE api/v1/me/profile/avatar
-        /// <summary>
-        /// Deletes current avatar
-        /// </summary>
-        /// <returns>A user profile</returns>  
-        [SwaggerResponse(200, ResponseMessages.RequestSuccessful, typeof(JsonResponse<UserProfileResponseModel>))]
-        [SwaggerResponse(401, ResponseMessages.Unauthorized, typeof(ErrorResponseModel))]
-        [SwaggerResponse(500, ResponseMessages.InternalServerError, typeof(ErrorResponseModel))]
-        [HttpDelete("Me/Profile/Avatar")]
-        public async Task<IActionResult> DeleteAvatar()
-        {
-            var data = _userService.DeleteAvatar(User.GetUserId());
-
-            return Json(new JsonResponse<UserProfileResponseModel>(data));
         }
 
         #endregion

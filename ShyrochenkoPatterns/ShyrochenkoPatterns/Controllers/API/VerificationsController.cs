@@ -161,7 +161,7 @@ namespace ShyrochenkoPatterns.Controllers.API
 
             return Json(new JsonResponse<LoginResponseModel>(response));
         }
-
+        
         #region Register_Phone
 
         // POST api/v1/verifications/phone/password
@@ -256,28 +256,5 @@ namespace ShyrochenkoPatterns.Controllers.API
         }
 
         #endregion
-
-
-
-
-
-        // send code to phone
-        [HttpGet("Code")]
-        public async Task<IActionResult> TwilioSendCode()
-        {
-            var user = await _userManager.FindByIdAsync(User.GetUserId().ToString());
-            await _sMSService.SendVerificationCodeAsync(user, user.PhoneNumber, Models.Enums.VerificationCodeType.Confirm);
-
-            return Json(new JsonResponse<MessageResponseModel>(new MessageResponseModel("Code sent")));
-        }
-
-        //make call
-        [HttpGet("MekeCall")]
-        public async Task<IActionResult> MakeCall()
-        {
-            await _callService.VerificationCall(await _userManager.FindByIdAsync(User.GetUserId().ToString()));
-
-            return Ok();
-        }
     }
 }
