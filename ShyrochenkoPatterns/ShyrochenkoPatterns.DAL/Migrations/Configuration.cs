@@ -18,9 +18,7 @@ namespace ShyrochenkoPatterns.DAL.Migrations
 
             new List<ApplicationRole>
             {
-                new ApplicationRole { Name = "User", NormalizedName = "User" },
-                new ApplicationRole { Name = "Admin", NormalizedName = "Admin" },
-                new ApplicationRole { Name = "SuperAdmin", NormalizedName = "SuperAdmin" }
+                new ApplicationRole { Name = "User", NormalizedName = "User" }
             }
             .ForEach(i =>
             {
@@ -34,7 +32,7 @@ namespace ShyrochenkoPatterns.DAL.Migrations
 
             #region Creating Super Admins
 
-            var superadmins = new List<ApplicationUser>
+            var users = new List<ApplicationUser>
             {
                 new ApplicationUser
                 {
@@ -86,10 +84,7 @@ namespace ShyrochenkoPatterns.DAL.Migrations
                     LockoutEnabled = false,
                     SecurityStamp = Guid.NewGuid().ToString()
                 },
-            };
 
-            var admins = new List<ApplicationUser>
-            {
                 new ApplicationUser
                 {
                     UserName = "admin@admin.com",
@@ -144,16 +139,10 @@ namespace ShyrochenkoPatterns.DAL.Migrations
 
             var password = "Admin123";
 
-            foreach (var user in superadmins)
+            foreach (var user in users)
             {
                 if (!context.Users.Any(u => u.UserName == user.UserName))
-                    SeedAdmin(user, password, Role.SuperAdmin);
-            }
-
-            foreach (var user in admins)
-            {
-                if (!context.Users.Any(u => u.UserName == user.UserName))
-                    SeedAdmin(user, password, Role.Admin);
+                    SeedAdmin(user, password, Role.User);
             }
 
             void SeedAdmin(ApplicationUser user, string passwordString, string role)

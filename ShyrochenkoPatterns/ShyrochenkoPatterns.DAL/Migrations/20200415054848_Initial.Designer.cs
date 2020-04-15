@@ -10,8 +10,8 @@ using ShyrochenkoPatterns.DAL;
 namespace ShyrochenkoPatterns.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200412122454_test")]
-    partial class test
+    [Migration("20200415054848_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -288,6 +288,9 @@ namespace ShyrochenkoPatterns.DAL.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<double>("Popularity")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("RegistratedAt")
                         .HasColumnType("datetime2");
@@ -695,8 +698,14 @@ namespace ShyrochenkoPatterns.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("PartNumber")
                         .HasColumnType("int");
@@ -711,6 +720,8 @@ namespace ShyrochenkoPatterns.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Stories");
                 });
@@ -859,6 +870,15 @@ namespace ShyrochenkoPatterns.DAL.Migrations
                     b.HasOne("ShyrochenkoPatterns.Domain.Entities.Identity.ApplicationUser", "User")
                         .WithMany("StripeSubscriptions")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ShyrochenkoPatterns.Domain.Entities.Post.Story", b =>
+                {
+                    b.HasOne("ShyrochenkoPatterns.Domain.Entities.Identity.ApplicationUser", "Author")
+                        .WithMany("Stories")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

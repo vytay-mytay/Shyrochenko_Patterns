@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using ShyrochenkoPatterns.Common.Extensions;
 using ShyrochenkoPatterns.Domain.Entities.Chat;
 using ShyrochenkoPatterns.Domain.Entities.Payment;
+using ShyrochenkoPatterns.Domain.Entities.Post;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +39,8 @@ namespace ShyrochenkoPatterns.Domain.Entities.Identity
 
         public string LinkedInId { get; set; }
 
+        public double Popularity { get; set; }
+
         /// <summary>
         /// Difference between server and user timezones in hours 
         /// </summary>
@@ -69,6 +72,9 @@ namespace ShyrochenkoPatterns.Domain.Entities.Identity
 
         [InverseProperty("User")]
         public ICollection<StripeSubscription> StripeSubscriptions { get; set; }
+
+        [InverseProperty("Author")]
+        public virtual ICollection<Story> Stories { get; set; }
 
         #endregion
 

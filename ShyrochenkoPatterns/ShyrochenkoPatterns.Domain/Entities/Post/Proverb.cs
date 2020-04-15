@@ -18,7 +18,6 @@ namespace ShyrochenkoPatterns.Domain.Entities.Post
 
         public DateTime CreationDate { get; set; }
 
-
         public Proverb()
         { }
 
