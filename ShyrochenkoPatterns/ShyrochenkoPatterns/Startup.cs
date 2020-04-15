@@ -116,12 +116,6 @@ namespace ShyrochenkoPatterns
             
             services.AddTransient<IPostPrototype, PostPrototype>();
 
-            //services.AddScoped<IBridgeImplementation, BridgeAdminImplementation>();
-            //services.AddScoped<IBridgeImplementation, BridgeUserEmailImplementation>();
-            //services.AddScoped<IBridgeImplementation, BridgeUserPhoneImplementation>();
-            //services.AddScoped<IBridgeImplementation, BridgeUserFacebookPhoneImplementation>();
-            //services.AddScoped<IBridgeImplementation, BridgeUserFacebookEmailImplementation>();
-
             services.AddSingleton<BridgeAdminImplementation>();
             services.AddSingleton<BridgeUserEmailImplementation>();
             services.AddSingleton<BridgeUserPhoneImplementation>();
@@ -171,12 +165,6 @@ namespace ShyrochenkoPatterns
                         return serviceProvider.GetService<BridgeUserEmail>(); // вот тут может быть опасно
                 }
             });
-
-            //services.AddScoped<IBridgeAbstraction, BridgeAdmin>();
-            //services.AddScoped<IBridgeAbstraction, BridgeUserEmail>();
-            //services.AddScoped<IBridgeAbstraction, BridgeUserPhone>();
-            //services.AddScoped<IBridgeAbstraction, BridgeUserFacebookPhone>();
-            //services.AddScoped<IBridgeAbstraction, BridgeUserFacebookEmail>();
 
             services.AddTransient<IScaner, Scaner>();
             services.AddTransient<IPrinter, Printer>();
