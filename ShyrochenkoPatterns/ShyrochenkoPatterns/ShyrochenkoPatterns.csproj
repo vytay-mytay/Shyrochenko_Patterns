@@ -32,7 +32,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.Aspnetcore.swagger" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.Aspnetcore.swaggergen" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.Aspnetcore.swaggerui" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.Aspnetcore.swaggerui" Version="6.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
     <PackageReference Include="Twilio.AspNet.Core" Version="5.33.1" />
     <PackageReference Include="Wangkanai.Detection" Version="2.0.0-beta10" />
